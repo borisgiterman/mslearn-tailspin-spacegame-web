@@ -3,15 +3,16 @@
 # Add steps that run tests, create a NuGet package, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-# specifies that push to master branch cause a continuous integration build to run
+# specifies that push to any branch causes a continuous integration build to run
 trigger:
-- master
+- '*'
 
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   buildConfiguration: 'Release'
+  wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   appname: 'OutYard Web'
 
 steps:
@@ -23,5 +24,60 @@ steps:
     version: '3.1.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build for $(appname) $(buildConfiguration)'
+# uses npm to install packages, specified in package.json file and any packages that it depends on
+- task: Npm@1
+  displayName: 'Run npm install'
+  inputs:
+    verbose: false
+
+# compiles the application output (web pages)   
+- script: './node_modules/.bin/node-sass Tailspin.SpaceGame.Web/wwwroot --output Tailspin.SpaceGame.Web/wwwroot'
+  displayName: 'Compile Sass assets'
+
+- task: gulp@1
+  displayName: 'Run gulp tasks'
+
+# writes information about the build to a file buildinfo.txt
+- script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(Build.BuildNumber)" > buildinfo.txt'
+  displayName: 'Write build info'
+  workingDirectory: $(wwwrootDir)
+
+# restores dotnetcore project dependencies
+- task: DotNetCoreCLI@2
+  displayName: 'Restore project dependencies'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+# calls the reusable template, which:
+# 1. builds the project, using configuration mode, defined by $(buildConfiguration) var
+# 2. publish, the application's build results (including its dependencies) into a folder.
+# The zipAfterPublish argument specifies to add the built results to a .zip file
+- template: templates/build.yml
+  parameters:
+    buildConfiguration: $(buildConfiguration)
+
+# builds the project, using configuration mode, defined by $(buildConfiguration) var
+# - task: DotNetCoreCLI@2
+#  displayName: 'dotnet build for $(appname) $(buildConfiguration) Configuration'
+#  inputs:
+#    command: 'build'
+#    arguments: '--no-restore --configuration $(buildConfiguration)'
+#    projects: '**/*.csproj'
+
+
+# publish, the application's build results (including its dependencies) into a folder. 
+# The zipAfterPublish argument specifies to add the built results to a .zip file
+# - task: DotNetCoreCLI@2
+#  displayName: 'Publish the project - Release'
+#  inputs:
+#    command: 'publish'
+#    projects: '**/*.csproj'
+#    publishWebProjects: false
+#    arguments: '--no-build --configuration Release --output $(Build.ArtifactStagingDirectory)/Release'
+#    zipAfterPublish: true
+
+# publish the .zip file to Azure Pipelines. The condition argument specifies to run the task only when the previous task succeeds.
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact - zipped application binaries: drop'
+  condition: succeeded()
