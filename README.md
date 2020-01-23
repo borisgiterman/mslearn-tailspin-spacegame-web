@@ -1,3 +1,4 @@
+[![Build Status](https://dev.azure.com/ceg-devopstest/Out-yard-web/_apis/build/status/borisgiterman.mslearn-tailspin-spacegame-web?branchName=master)](https://dev.azure.com/ceg-devopstest/Out-yard-web/_build/latest?definitionId=1&branchName=master)
 
 # Contributing
 
