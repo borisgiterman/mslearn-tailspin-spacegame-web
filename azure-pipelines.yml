@@ -66,6 +66,7 @@ steps:
     publishTestResults: true
     projects: '**/*.Tests.csproj'
 
+
 # builds the project, using configuration mode, defined by $(buildConfiguration) var
 # - task: DotNetCoreCLI@2
 #  displayName: 'dotnet build for $(appname) $(buildConfiguration) Configuration'
