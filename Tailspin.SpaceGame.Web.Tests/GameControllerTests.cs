@@ -34,7 +34,8 @@ namespace Tests
             _gameController =new GameController(_scoreRepository, profileRespository);
         }
 
-        [TestCase(ExpectedResult =25)]
+        // This test case succeeds if ExpectedResult equals to 25
+        [TestCase(ExpectedResult =24)]
         public int CountGamePlayers()
         {
             List<PlayerScore> playerScores = (List<PlayerScore>)Convert.ChangeType
