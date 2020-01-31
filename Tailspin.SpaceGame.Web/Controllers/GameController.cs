@@ -29,6 +29,10 @@ namespace Tailspin.SpaceGame.Web.Controllers
             _profileRespository = profileRespository;
         }
 
+        public GameController()
+        {
+        }
+
         /// <summary>
         /// Returns the entire list of players.
         /// </summary>
