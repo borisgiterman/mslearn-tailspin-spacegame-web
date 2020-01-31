@@ -14,7 +14,7 @@ steps:
 # installs ReportGenerator, which provides a number of formats, including HTML. The HTML formats 
 # create detailed reports for each class in a .NET project.    
 - task: DotNetCoreCLI@2
-  displayName: 'Install code coverage ReportGenerator (converts results to a format that's human-readable)'
+  displayName: 'Install code coverage ReportGenerator (converts results to a format that is human-readable)'
   inputs:
     command: custom
     custom: tool
