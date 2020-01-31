@@ -35,7 +35,7 @@ namespace Tests
         }
 
         // This test case succeeds if ExpectedResult equals to 25
-        [TestCase(ExpectedResult =24)]
+        [TestCase(ExpectedResult =25,Description ="Checks players qty.")]
         public int CountGamePlayers()
         {
             List<PlayerScore> playerScores = (List<PlayerScore>)Convert.ChangeType
