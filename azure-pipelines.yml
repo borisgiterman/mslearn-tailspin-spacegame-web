@@ -11,6 +11,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
+  author: 'Boris Giterman'    
   buildConfiguration: 'Release'
   wwwrootDir: 'Tailspin.SpaceGame.Web/wwwroot'
   appname: 'OutYard Web'
@@ -84,5 +85,6 @@ steps:
 
 # writes greetings to the terminal
 - task: CmdLine@2
+  displayName: 'Greetings to DevOps on done job'
   inputs:
-    script: 'echo Hi You did a gret job!!!.' 
+    script: 'echo Hi $(author). You did a great job!!!.' 
