@@ -81,3 +81,8 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact - zipped application binaries: drop'
   condition: succeeded()
+
+# writes greetings to the terminal
+- task: CmdLine@2
+  inputs:
+    script: 'echo Hi You did a gret job!!!.' 
