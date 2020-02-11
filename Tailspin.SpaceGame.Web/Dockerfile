@@ -1,21 +1,26 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
-WORKDIR /app
-EXPOSE 80
-
+# set the .net core sdk image for the build
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
-WORKDIR /src
-COPY ["Tailspin.SpaceGame.Web/Tailspin.SpaceGame.Web.csproj", "Tailspin.SpaceGame.Web/"]
-RUN dotnet restore "Tailspin.SpaceGame.Web/Tailspin.SpaceGame.Web.csproj"
-COPY . .
-WORKDIR "/src/Tailspin.SpaceGame.Web"
-RUN dotnet build "Tailspin.SpaceGame.Web.csproj" -c Release -o /app/build
+# define the working directory
+WORKDIR /source
 
-FROM build AS publish
-RUN dotnet publish "Tailspin.SpaceGame.Web.csproj" -c Release -o /app/publish
+# copy csproj
+COPY Tailspin.SpaceGame.Web.csproj ./Tailspin.SpaceGame.Web/
+# copy everything else
+COPY . ./Tailspin.SpaceGame.Web/
 
-FROM base AS final
+# set the working directory as a project directory
+WORKDIR /source/Tailspin.SpaceGame.Web
+# restore dependencies and tools for the project in the current directory showing normal output.
+RUN dotnet restore --verbosity normal
+
+# builds and publishes the compiled application
+RUN dotnet publish -c Release -o /app --no-restore
+
+# final stage/image - pulls slim asp.core image
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
-COPY --from=publish /app/publish .
+# copy the compiled content from the build image to the runtime
+COPY --from=build /app ./
+EXPOSE 5004:80
+# set the application entry point
 ENTRYPOINT ["dotnet", "Tailspin.SpaceGame.Web.dll"]
