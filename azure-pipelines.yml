@@ -60,12 +60,11 @@ steps:
 - template: templates/build.yml
   parameters:
     buildConfiguration: $(buildConfiguration)
-    buildConfiguration: 'Release'
     dockerRegistryServiceConnection: DockerHubConnection
     imageRepository: '5168/spacegame'
     dockerfilePath: ./Tailspin.SpaceGame.Web
     tag: 'latest'
-    
+
 # build and push the application docker to the docker hub    
 - template: templates/docker_BuildandPush.yml
   parameters:
