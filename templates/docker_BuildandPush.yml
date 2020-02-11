@@ -1,10 +1,24 @@
 #  devops template to build , test and publish the application
 parameters:
     buildConfiguration: 'Release'
+    dockerRegistryServiceConnection: DockerHubConnection
+    imageRepository: '5168/spacegame'
+    dockerfilePath: ./Tailspin.SpaceGame.Web
+    tag: 'latest'
 steps:
 # execute login operation to docker hub
 - task: Docker@2
   displayName: Login to Docker Hub
   inputs:
     command: login
-    containerRegistry: DockerHubConnection
+    containerRegistry: $(dockerRegistryServiceConnection)
+
+# build and push image to container registry    
+task: Docker@2
+  displayName: 'Build and push an image to container registry for $(buildConfiguration).'
+  inputs:
+  command: buildAndPush
+  repository: $(imageRepository)
+  dockerfile: $(dockerfilePath)
+  containerRegistry: $(dockerRegistryServiceConnection)
+  tags: $(tag)    
