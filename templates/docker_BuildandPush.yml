@@ -1,0 +1,10 @@
+#  devops template to build , test and publish the application
+parameters:
+    buildConfiguration: 'Release'
+steps:
+# execute login operation to docker hub
+- task: Docker@2
+  displayName: Login to Docker Hub
+  inputs:
+    command: login
+    containerRegistry: DockerHubConnection
