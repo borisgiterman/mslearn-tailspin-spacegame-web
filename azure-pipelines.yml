@@ -60,7 +60,7 @@ steps:
 - template: templates/build.yml
   parameters:
     buildConfiguration: $(buildConfiguration)
-    dockerRegistryServiceConnection: DockerHubConnection
+    dockerRegistryServiceConnection: 'DockerHubConnection'
     imageRepository: '5168/spacegame'
     dockerfilePath: ./Tailspin.SpaceGame.Web
     tag: 'latest'
