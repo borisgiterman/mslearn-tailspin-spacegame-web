@@ -12,7 +12,7 @@ steps:
   displayName: Login to Docker Hub
   inputs:
     command: login
-    containerRegistry: $(parameters.dockerfilePath)
+    containerRegistry: $(parameters.dockerRegistryServiceConnection)
 
 # build and push image to container registry    
 - task: Docker@2
@@ -21,5 +21,5 @@ steps:
     command: buildAndPush
     repository: $(parameters.imageRepository)
     dockerfile: $(parameters.dockerfilePath)
-    containerRegistry: $(parameters.dockerfilePath)
+    containerRegistry: $(parameters.dockerRegistryServiceConnection)
     tags: $(parameters.tag)    
