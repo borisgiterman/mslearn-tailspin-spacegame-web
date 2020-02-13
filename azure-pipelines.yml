@@ -60,15 +60,16 @@ steps:
 - template: templates/build.yml
   parameters:
     buildConfiguration: $(buildConfiguration)
-    dockerRegistryServiceConnection: 'DockerHubConnection'
-    imageRepository: '5168/spacegame'
-    dockerfilePath: ./Tailspin.SpaceGame.Web
-    tag: 'latest'
+    
 
 # build and push the application docker to the docker hub    
 - template: templates/docker_BuildandPush.yml
   parameters:
     buildConfiguration: $(buildConfiguration)
+    dockerRegistryServiceConnection: DockerHubConnection
+    imageRepository: '5168/spacegame'
+    dockerfilePath: ./Tailspin.SpaceGame.Web
+    tag: 'latest'
 
 # publish the .zip file to Azure Pipelines. The condition argument specifies to run the task only when the previous task succeeds.
 - task: PublishBuildArtifacts@1
