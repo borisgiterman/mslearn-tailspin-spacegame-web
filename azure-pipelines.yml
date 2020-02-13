@@ -68,7 +68,7 @@ steps:
     buildConfiguration: $(buildConfiguration)
     dockerRegistryServiceConnection: DockerHubConnection
     imageRepository: '5168/spacegame'
-    dockerfilePath: ./Tailspin.SpaceGame.Web
+    dockerfilePath: ./Tailspin.SpaceGame.Web/Dockerfile
     tag: 'latest'
 
 # publish the .zip file to Azure Pipelines. The condition argument specifies to run the task only when the previous task succeeds.
