@@ -72,9 +72,9 @@ steps:
     tag: 'latest'
 
 # publish the .zip file to Azure Pipelines. The condition argument specifies to run the task only when the previous task succeeds.
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish Artifact - zipped application binaries: drop'
-  condition: succeeded()
+#- task: PublishBuildArtifacts@1
+#  displayName: 'Publish Artifact - zipped application binaries: drop'
+#  condition: succeeded()
 
 # writes greetings to the terminal
 - task: CmdLine@2
